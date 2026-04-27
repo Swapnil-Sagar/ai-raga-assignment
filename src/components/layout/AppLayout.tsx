@@ -18,6 +18,9 @@ export const AppLayout = () => {
 
   return (
     <div className="app-shell">
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
       <aside className="sidebar">
         <h1 className="brand">Raga HealthOps</h1>
         <p className="brand__sub">Care intelligence platform</p>
@@ -40,7 +43,7 @@ export const AppLayout = () => {
             {isLoading ? 'Signing out...' : 'Logout'}
           </button>
         </header>
-        <main className="page-container">
+        <main id="main-content" className="page-container">
           <Outlet />
         </main>
       </div>

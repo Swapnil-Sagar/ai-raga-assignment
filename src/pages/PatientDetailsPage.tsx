@@ -20,6 +20,7 @@ export const PatientDetailsPage = () => {
             type="button"
             className={viewMode === 'grid' ? 'active' : ''}
             onClick={() => setViewMode('grid')}
+            aria-pressed={viewMode === 'grid'}
           >
             Grid View
           </button>
@@ -27,6 +28,7 @@ export const PatientDetailsPage = () => {
             type="button"
             className={viewMode === 'list' ? 'active' : ''}
             onClick={() => setViewMode('list')}
+            aria-pressed={viewMode === 'list'}
           >
             List View
           </button>
