@@ -7,6 +7,9 @@ import { useAuthStore } from './stores/useAuthStore'
 const LoginPage = lazy(() =>
   import('./pages/LoginPage').then((module) => ({ default: module.LoginPage })),
 )
+const SignUpPage = lazy(() =>
+  import('./pages/SignUpPage').then((module) => ({ default: module.SignUpPage })),
+)
 const DashboardPage = lazy(() =>
   import('./pages/DashboardPage').then((module) => ({ default: module.DashboardPage })),
 )
@@ -37,6 +40,10 @@ function App() {
         <Route
           path="/login"
           element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage />}
+        />
+        <Route
+          path="/signup"
+          element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <SignUpPage />}
         />
         <Route
           element={isAuthenticated ? <AppLayout /> : <Navigate to="/login" replace />}

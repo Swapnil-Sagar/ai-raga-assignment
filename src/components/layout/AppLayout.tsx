@@ -1,10 +1,13 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { MdDashboard, MdAnalytics } from 'react-icons/md'
+import { FaUserInjured } from 'react-icons/fa'
+import { FiLogOut } from 'react-icons/fi'
 import { useAuthStore } from '../../stores/useAuthStore'
 
 const navigation = [
-  { to: '/dashboard', label: 'Dashboard' },
-  { to: '/analytics', label: 'Analytics' },
-  { to: '/patients', label: 'Patient Details' },
+  { to: '/dashboard', label: 'Dashboard', icon: <MdDashboard /> },
+  { to: '/analytics', label: 'Analytics', icon: <MdAnalytics /> },
+  { to: '/patients', label: 'Patient Details', icon: <FaUserInjured /> },
 ]
 
 export const AppLayout = () => {
@@ -27,6 +30,7 @@ export const AppLayout = () => {
         <nav className="sidebar__nav">
           {navigation.map((item) => (
             <NavLink key={item.to} to={item.to}>
+              {item.icon}
               {item.label}
             </NavLink>
           ))}
@@ -40,6 +44,7 @@ export const AppLayout = () => {
             <p className="topbar__user">{user?.email ?? 'Unknown user'}</p>
           </div>
           <button type="button" onClick={handleLogout} disabled={isLoading}>
+            <FiLogOut style={{ marginRight: '0.4rem', verticalAlign: 'middle' }} />
             {isLoading ? 'Signing out...' : 'Logout'}
           </button>
         </header>

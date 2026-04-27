@@ -1,4 +1,5 @@
 import {
+  createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
@@ -14,6 +15,7 @@ interface AuthState {
   isLoading: boolean
   authError: string | null
   signIn: (email: string, password: string) => Promise<void>
+  signUp: (email: string, password: string) => Promise<void>
   signOutUser: () => Promise<void>
   setAuthUser: (user: User | null) => void
   clearAuthError: () => void
@@ -29,6 +31,18 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: true, authError: null })
     try {
       await signInWithEmailAndPassword(auth, email, password)
+    } catch (error) {
+      const message = mapAuthErrorMessage(error)
+      set({ authError: message })
+      throw error
+    } finally {
+      set({ isLoading: false })
+    }
+  },
+  signUp: async (email, password) => {
+    set({ isLoading: true, authError: null })
+    try {
+      await createUserWithEmailAndPassword(auth, email, password)
     } catch (error) {
       const message = mapAuthErrorMessage(error)
       set({ authError: message })
@@ -79,11 +93,15 @@ const mapAuthErrorMessage = (error: unknown) => {
       return 'Invalid credentials. Please check your email and password.'
     case 'auth/invalid-email':
       return 'Please enter a valid email address.'
+    case 'auth/email-already-in-use':
+      return 'An account with this email already exists.'
+    case 'auth/weak-password':
+      return 'Password is too weak. Use at least 6 characters.'
     case 'auth/too-many-requests':
       return 'Too many attempts. Please wait a minute and try again.'
     case 'auth/network-request-failed':
       return 'Network issue detected. Check your connection and retry.'
     default:
-      return 'Unable to sign in right now. Please try again.'
+      return 'Something went wrong. Please try again.'
   }
 }

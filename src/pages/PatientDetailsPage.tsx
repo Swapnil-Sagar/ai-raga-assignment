@@ -1,4 +1,6 @@
 import { useMemo } from 'react'
+import { BsGrid3X3GapFill } from 'react-icons/bs'
+import { FiList } from 'react-icons/fi'
 import { PatientGrid } from '../components/patients/PatientGrid'
 import { PatientList } from '../components/patients/PatientList'
 import { usePatientStore } from '../stores/usePatientStore'
@@ -22,7 +24,8 @@ export const PatientDetailsPage = () => {
             onClick={() => setViewMode('grid')}
             aria-pressed={viewMode === 'grid'}
           >
-            Grid View
+            <BsGrid3X3GapFill style={{ marginRight: '0.35rem', verticalAlign: 'middle' }} />
+            Grid
           </button>
           <button
             type="button"
@@ -30,7 +33,8 @@ export const PatientDetailsPage = () => {
             onClick={() => setViewMode('list')}
             aria-pressed={viewMode === 'list'}
           >
-            List View
+            <FiList style={{ marginRight: '0.35rem', verticalAlign: 'middle' }} />
+            List
           </button>
         </div>
       </div>
