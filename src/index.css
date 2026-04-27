@@ -1,5 +1,10 @@
 :root {
-  font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    sans-serif;
   color: #101728;
   background: #eef3fb;
   font-synthesis: none;
@@ -37,6 +42,23 @@ body {
   animation: spin 0.9s linear infinite;
 }
 
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 12px;
+  background: #ffffff;
+  color: #132447;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  z-index: 1000;
+  text-decoration: none;
+  border: 1px solid #c4d4f3;
+}
+
+.skip-link:focus-visible {
+  top: 12px;
+}
+
 button,
 input {
   font: inherit;
@@ -49,12 +71,21 @@ button {
   border-radius: 10px;
   padding: 0.65rem 1rem;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 button:hover {
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+}
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 3px solid #78a6ff;
+  outline-offset: 2px;
 }
 
 .login-page {
@@ -191,6 +222,14 @@ button:hover {
   border-radius: 16px;
   padding: 1rem;
   box-shadow: 0 10px 25px rgba(26, 37, 67, 0.07);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(26, 37, 67, 0.1);
 }
 
 .card__header h3 {
@@ -406,5 +445,16 @@ button:hover {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Card } from '../components/common/Card'
 import { useNotification } from '../hooks/useNotification'
 import { usePatientStore } from '../stores/usePatientStore'
@@ -6,13 +7,17 @@ export const DashboardPage = () => {
   const { sendNotification } = useNotification()
   const patients = usePatientStore((state) => state.patients)
 
-  const criticalCases = patients.filter((patient) => patient.status === 'critical').length
+  const kpiCards = useMemo(() => {
+    const criticalCases = patients.filter(
+      (patient) => patient.status === 'critical',
+    ).length
 
-  const kpiCards = [
-    { title: 'Active Patients', value: String(patients.length), delta: '+3.1%' },
-    { title: 'Critical Cases', value: String(criticalCases), delta: '-1.5%' },
-    { title: 'Avg. Response Time', value: '4m 10s', delta: '-11%' },
-  ]
+    return [
+      { title: 'Active Patients', value: String(patients.length), delta: '+3.1%' },
+      { title: 'Critical Cases', value: String(criticalCases), delta: '-1.5%' },
+      { title: 'Avg. Response Time', value: '4m 10s', delta: '-11%' },
+    ]
+  }, [patients])
 
   const handleReminder = async () => {
     await sendNotification(
