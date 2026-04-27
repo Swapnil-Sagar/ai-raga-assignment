@@ -7,7 +7,16 @@ import { PatientDetailsPage } from './pages/PatientDetailsPage'
 import { useAuthStore } from './stores/useAuthStore'
 
 function App() {
-  const { isAuthenticated } = useAuthStore()
+  const { isAuthenticated, isSessionReady } = useAuthStore()
+
+  if (!isSessionReady) {
+    return (
+      <div className="screen-loader" role="status" aria-live="polite">
+        <div className="screen-loader__spinner" />
+        <p>Restoring your secure session...</p>
+      </div>
+    )
+  }
 
   return (
     <Routes>

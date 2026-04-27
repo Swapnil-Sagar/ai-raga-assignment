@@ -7,19 +7,27 @@ export const LoginPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [validationError, setValidationError] = useState<string | null>(null)
+  const loginError = validationError ?? authError
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
     clearAuthError()
     setValidationError(null)
 
-    if (!email || !password) {
+    const normalizedEmail = email.trim()
+
+    if (!normalizedEmail || !password) {
       setValidationError('Email and password are required.')
       return
     }
 
+    if (!/^\S+@\S+\.\S+$/.test(normalizedEmail)) {
+      setValidationError('Enter a valid email format.')
+      return
+    }
+
     try {
-      await signIn(email, password)
+      await signIn(normalizedEmail, password)
     } catch {
       // Auth error state is handled by the store.
     }
@@ -35,20 +43,26 @@ export const LoginPage = () => {
           <input
             id="email"
             type="email"
+            autoComplete="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             placeholder="you@hospital.com"
+            aria-invalid={Boolean(loginError)}
           />
           <label htmlFor="password">Password</label>
           <input
             id="password"
             type="password"
+            autoComplete="current-password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             placeholder="Enter password"
+            aria-invalid={Boolean(loginError)}
           />
-          {(validationError || authError) ? (
-            <p className="form-error">{validationError ?? authError}</p>
+          {loginError ? (
+            <p className="form-error" role="alert">
+              {loginError}
+            </p>
           ) : null}
           <button type="submit" disabled={isLoading}>
             {isLoading ? 'Signing in...' : 'Login'}

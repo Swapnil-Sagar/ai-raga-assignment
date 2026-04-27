@@ -5,6 +5,15 @@ interface PatientGridProps {
 }
 
 export const PatientGrid = ({ patients }: PatientGridProps) => {
+  if (!patients.length) {
+    return (
+      <div className="empty-state">
+        <h3>No patients available</h3>
+        <p>When patient records are synced, they will appear here.</p>
+      </div>
+    )
+  }
+
   return (
     <div className="patient-grid">
       {patients.map((patient) => (

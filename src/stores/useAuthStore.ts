@@ -10,6 +10,7 @@ import { auth } from '../services/firebase'
 interface AuthState {
   user: User | null
   isAuthenticated: boolean
+  isSessionReady: boolean
   isLoading: boolean
   authError: string | null
   signIn: (email: string, password: string) => Promise<void>
@@ -21,6 +22,7 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   isAuthenticated: false,
+  isSessionReady: false,
   isLoading: false,
   authError: null,
   signIn: async (email, password) => {
@@ -28,7 +30,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       await signInWithEmailAndPassword(auth, email, password)
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Login failed'
+      const message = mapAuthErrorMessage(error)
       set({ authError: message })
       throw error
     } finally {
@@ -59,6 +61,29 @@ export const bootstrapAuthSession = () => {
 
   onAuthStateChanged(auth, (user) => {
     useAuthStore.getState().setAuthUser(user)
-    useAuthStore.setState({ isLoading: false })
+    useAuthStore.setState({ isLoading: false, isSessionReady: true })
   })
+}
+
+const mapAuthErrorMessage = (error: unknown) => {
+  if (typeof error !== 'object' || error === null || !('code' in error)) {
+    return 'Unable to sign in right now. Please try again.'
+  }
+
+  const authCode = String(error.code)
+
+  switch (authCode) {
+    case 'auth/invalid-credential':
+    case 'auth/wrong-password':
+    case 'auth/user-not-found':
+      return 'Invalid credentials. Please check your email and password.'
+    case 'auth/invalid-email':
+      return 'Please enter a valid email address.'
+    case 'auth/too-many-requests':
+      return 'Too many attempts. Please wait a minute and try again.'
+    case 'auth/network-request-failed':
+      return 'Network issue detected. Check your connection and retry.'
+    default:
+      return 'Unable to sign in right now. Please try again.'
+  }
 }
