@@ -81,6 +81,19 @@ export const LoginPage = () => {
           <button type="submit" disabled={isLoading}>
             {isLoading ? 'Signing in...' : 'Login'}
           </button>
+          <button
+            type="button"
+            className="btn-test-login"
+            disabled={isLoading}
+            onClick={() => {
+              setEmail('test@hospital.com')
+              setPassword('ragahospital')
+              clearAuthError()
+              setValidationError(null)
+            }}
+          >
+            Fill Test Credentials
+          </button>
         </form>
 
         <p className="auth-switch">
