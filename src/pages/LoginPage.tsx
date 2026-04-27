@@ -1,11 +1,15 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
+import { Link } from 'react-router-dom'
+import { FiEye, FiEyeOff } from 'react-icons/fi'
+import { FaGithub } from 'react-icons/fa'
 import { useAuthStore } from '../stores/useAuthStore'
 
 export const LoginPage = () => {
   const { signIn, isLoading, authError, clearAuthError } = useAuthStore()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [validationError, setValidationError] = useState<string | null>(null)
   const loginError = validationError ?? authError
 
@@ -50,15 +54,25 @@ export const LoginPage = () => {
             aria-invalid={Boolean(loginError)}
           />
           <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            placeholder="Enter password"
-            aria-invalid={Boolean(loginError)}
-          />
+          <div className="password-field">
+            <input
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              autoComplete="current-password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              placeholder="Enter password"
+              aria-invalid={Boolean(loginError)}
+            />
+            <button
+              type="button"
+              className="password-toggle"
+              onClick={() => setShowPassword((v) => !v)}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <FiEyeOff /> : <FiEye />}
+            </button>
+          </div>
           {loginError ? (
             <p className="form-error" role="alert">
               {loginError}
@@ -68,6 +82,22 @@ export const LoginPage = () => {
             {isLoading ? 'Signing in...' : 'Login'}
           </button>
         </form>
+
+        <p className="auth-switch">
+          Don&apos;t have an account? <Link to="/signup">Sign up</Link>
+        </p>
+
+        <footer className="auth-footer">
+          Made by Swapnil Sagar
+          <a
+            href="https://github.com/Swapnil-Sagar/ai-raga-assignment"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub repository"
+          >
+            <FaGithub size={18} />
+          </a>
+        </footer>
       </section>
     </div>
   )
